@@ -1,14 +1,44 @@
-import React from "react";
-import RoomsList from "./RoomsList";
-import { FaSearch } from "react-icons/fa";
+"use client";
+import React, { useEffect, useState, useContext } from "react";
+import { useRouter } from "next/navigation";
 
-const Rooms = ({ setIsModalOpen }: { setIsModalOpen: any }) => {
+import RoomsList from "./RoomsList";
+import { FaPlus, FaSearch, FaSignOutAlt } from "react-icons/fa";
+
+const Rooms = ({
+  setIsModalOpen,
+  rooms,
+  username,
+}: {
+  setIsModalOpen: any;
+  rooms: any;
+  username: any;
+}) => {
+  // Create a WebSocket connection
+  const router = useRouter();
+
+  const handleSignout = () => {
+    router.push(`/`);
+  };
   const openModal = () => {
     setIsModalOpen(true);
   };
 
   return (
-    <div className="w-2/5 bg-slate-700 h-full p-4 flex flex-col gap-4 ">
+    <div className="h-3/4 flex flex-col gap-4   ">
+      <div className="w-full flex flex-row justify-between items-center">
+        <h2 className="text-white font-bold text-lg capitalize">
+          Hello, {username ? username : <></>}
+        </h2>
+        <button
+          className="bg-red-500 text-white rounded-full w-12 h-12 flex items-center justify-center text-lg font-bold"
+          onClick={handleSignout}
+        >
+          <FaSignOutAlt size={20} fill="white" />
+        </button>
+      </div>
+      <hr className="border-slate-500 border w-full"></hr>
+
       <div className="flex flex-row gap-4 items-center justify-between">
         {" "}
         <h1>Rooms</h1>
@@ -16,7 +46,7 @@ const Rooms = ({ setIsModalOpen }: { setIsModalOpen: any }) => {
           className="bg-cyan-500 text-white rounded-full w-12 h-12 flex items-center justify-center text-lg font-bold"
           onClick={openModal}
         >
-          +
+          <FaPlus size={20} fill="white" />
         </button>
       </div>
       <div className="flex flex-row items-center w-full">
@@ -28,8 +58,8 @@ const Rooms = ({ setIsModalOpen }: { setIsModalOpen: any }) => {
           <FaSearch size={20} fill="white" />
         </div>
       </div>
-      <hr className="border-slate-500 border"></hr>
-      <RoomsList />
+      {/* <hr className="border-slate-500 border"></hr> */}
+      <RoomsList rooms={rooms} />
     </div>
   );
 };

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { WebSocketContext } from "../layout";
 
 const CreateRoomModal = ({ setIsModalOpen }: { setIsModalOpen: any }) => {
   const [roomName, setRoomName] = useState("");
+  const ws = useContext(WebSocketContext);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -12,13 +14,14 @@ const CreateRoomModal = ({ setIsModalOpen }: { setIsModalOpen: any }) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    ws.send(JSON.stringify({ type: "createRoom", roomName }));
 
-    // Do something with the roomName, e.g., send it to a parent component or perform an action.
-    console.log("Room Name:", roomName);
-
-    // Close the modal
-    closeModal();
+    // After creating the room, request the updated list of rooms
+    ws.send(JSON.stringify({ type: "requestRooms" }));
+    setRoomName("");
+    setIsModalOpen(false);
   };
+
   return (
     <>
       <div className="modal-overlay">
