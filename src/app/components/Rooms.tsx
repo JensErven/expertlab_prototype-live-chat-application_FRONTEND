@@ -4,20 +4,34 @@ import { useRouter } from "next/navigation";
 
 import RoomsList from "./RoomsList";
 import { FaPlus, FaSearch, FaSignOutAlt } from "react-icons/fa";
+import { WebSocketContext } from "../layout";
 
 const Rooms = ({
   setIsModalOpen,
   rooms,
   username,
+  setSelectRoom,
+  selectedRoom,
 }: {
   setIsModalOpen: any;
   rooms: any;
   username: any;
+  setSelectRoom: any;
+  selectedRoom: any;
 }) => {
+  const ws = useContext(WebSocketContext);
+
   // Create a WebSocket connection
   const router = useRouter();
 
   const handleSignout = () => {
+    // Close the WebSocket connection
+    // Note: Replace `ws` with your WebSocket connection reference
+    ws.close();
+
+    // Perform any other signout actions if necessary
+
+    // Redirect to the start screen
     router.push(`/`);
   };
   const openModal = () => {
@@ -25,7 +39,7 @@ const Rooms = ({
   };
 
   return (
-    <div className="h-3/4 flex flex-col gap-4   ">
+    <div className="h-1/2 flex flex-col gap-4   ">
       <div className="w-full flex flex-row justify-between items-center">
         <h2 className="text-white font-bold text-lg capitalize">
           Hello, {username ? username : <></>}
@@ -54,12 +68,16 @@ const Rooms = ({
           className="bg-slate-800 rounded-l-md  px-4 py-4 text-white h-full w-[80%]"
           placeholder="search room..."
         ></input>
-        <div className="p-2 flex bg-slate-500 rounded-r-md  h-full items-center  w-[20%] justify-center">
-          <FaSearch size={20} fill="white" />
+        <div className="p-2 flex bg-slate-800 rounded-r-md  h-full items-center  w-[20%] justify-center">
+          <FaSearch size={20} className="fill-slate-600" />
         </div>
       </div>
       {/* <hr className="border-slate-500 border"></hr> */}
-      <RoomsList rooms={rooms} />
+      <RoomsList
+        rooms={rooms}
+        setSelectRoom={setSelectRoom}
+        selectedRoom={selectedRoom}
+      />
     </div>
   );
 };

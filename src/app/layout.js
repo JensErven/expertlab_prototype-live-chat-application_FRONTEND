@@ -15,6 +15,13 @@ export default function RootLayout({ children }) {
     if (!ws) {
       const newSocket = new WebSocket("ws://localhost:8080");
       setWs(newSocket);
+    } else if (ws) {
+      ws.onerror = (error) => {
+        console.error("WebSocket Error:", error);
+
+        // Redirect to the error page
+        router.push("/error");
+      };
     }
 
     // Close the WebSocket connection when the RootLayout unmounts
@@ -23,10 +30,11 @@ export default function RootLayout({ children }) {
         ws.close();
       }
     };
-  }, []);
+  }, [ws]);
 
   return (
     <html lang="en">
+      <meta charset="UTF-8"></meta>
       <WebSocketContext.Provider value={ws}>
         <body className={inter.className}>{children}</body>
       </WebSocketContext.Provider>

@@ -1,7 +1,13 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { use, useEffect } from "react";
+import UserCard from "./UserCard";
 
-const UsersList = ({ users }: any) => {
+const UsersList = ({ users, setSelectedUser, selectedUser }: any) => {
+  const currentUser = sessionStorage.getItem("username");
+  useEffect(() => {
+    console.log("current user logged in", currentUser);
+    console.log("all users that are logged in", users);
+  }, [users, currentUser]);
   return (
     <div className="rounded-md h-fit flex flex-col gap-2 overflow-y-scroll">
       {users ? (
@@ -9,7 +15,14 @@ const UsersList = ({ users }: any) => {
           {" "}
           {users.map((user, index) => (
             <>
-              <div>test</div>
+              {currentUser !== user && (
+                <UserCard
+                  user={user}
+                  key={index}
+                  setSelectedUser={setSelectedUser}
+                  selectedUser={selectedUser}
+                />
+              )}
             </>
 
             // <RoomCard key={index} roomName={roomName[0]} />

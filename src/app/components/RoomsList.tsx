@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import RoomCard from "./RoomCard";
 import { useHtmlContext } from "next/dist/shared/lib/html-context.shared-runtime";
 
-const RoomsList = ({ rooms }: any) => {
+const RoomsList = ({ rooms, setSelectRoom, selectedRoom }: any) => {
   useEffect(() => {
     console.log(rooms);
   }, [rooms]);
@@ -13,7 +13,12 @@ const RoomsList = ({ rooms }: any) => {
         <>
           {" "}
           {rooms.map((room, index) => (
-            <RoomCard key={room.roomId} room={room} />
+            <RoomCard
+              key={room.roomId}
+              room={room}
+              setSelectRoom={setSelectRoom}
+              selectedRoom={selectedRoom}
+            />
           ))}
         </>
       ) : (
